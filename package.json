@@ -1,0 +1,17 @@
+{
+  "name": "tyk-grpc-plugin",
+  "version": "1.0.0",
+  "description": "Simple gRPC plugin for Tyk Gateway",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "@grpc/grpc-js": "^1.9.0",
+    "@grpc/proto-loader": "^0.7.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
+  }
+}

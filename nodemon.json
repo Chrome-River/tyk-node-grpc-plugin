@@ -1,0 +1,14 @@
+{
+  "watch": [
+    "server.js",
+    "proto"
+  ],
+  "ext": "js,json,proto",
+  "ignore": [
+    "node_modules/**",
+    ".git/**"
+  ],
+  "exec": "node server.js",
+  "restartable": "rs"
+}
+
