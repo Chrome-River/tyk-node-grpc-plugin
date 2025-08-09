@@ -1,0 +1,41 @@
+info:
+  title: node-grpc
+  version: 1.0.0
+openapi: 3.0.3
+servers:
+  - url: http://tyk-gateway.localhost:8080/node-grpc/
+security: []
+paths: {}
+components:
+  securitySchemes: {}
+x-tyk-api-gateway:
+  info:
+    dbId: 6897dbb65c69300001804bd4
+    id: 7990370812304d505b21420e6cc34dc2
+    orgId: 5e9d9544a1dcd60001d0ed20
+    name: node-grpc
+    state:
+      active: true
+      internal: false
+  middleware:
+    global:
+      contextVariables:
+        enabled: true
+      pluginConfig:
+        driver: grpc
+      prePlugins:
+        - enabled: true
+          functionName: MyPreMiddleware
+          path: ''
+      trafficLogs:
+        enabled: true
+  server:
+    gatewayTags:
+      enabled: true
+      tags:
+        - dev2
+    listenPath:
+      strip: true
+      value: /node-grpc/
+  upstream:
+    url: http://httpbin.org/
