@@ -120,10 +120,12 @@ async function MyPreMiddleware(object) {
       response_body: response.body,
       headers: response.headers,
     };
-
-    console.log('Returning override response');
   } catch (error) {
-    console.error('Error making upstream call:', error);
+    object.request.return_overrides = {
+      response_code: 500,
+      response_body: 'Middleware Error: Error calling upstream for customer ' + (customerCode || customerId) + '.',
+      headers: { 'Content-Type': 'text/plain' }
+    };
   }
 
   return object;
