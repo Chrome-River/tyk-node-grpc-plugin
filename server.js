@@ -22,11 +22,11 @@ const coprocessProto = grpc.loadPackageDefinition(packageDefinition).coprocess;
 
 // Map of cluster string to region URL
 const clusterRegionMap = {
-  'c1': 'api-poc.us.chromeriver.com',
-  'c3': 'api-poc.eu1.chromeriver.com',
-  'c4': 'api-poc.us2.chromeriver.com',
-  'c5': 'api-poc.ca1.chromeriver.com',
-  'c7': 'api-poc.us2.chromeriver.com',
+  'c1': 'api-poc.uat.us.chromeriver.com',
+  'c3': 'api-poc.uat.eu1.chromeriver.com',
+  'c4': 'api-poc.uat.us2.chromeriver.com',
+  'c5': 'api-poc.uat.ca1.chromeriver.com',
+  'c7': 'api-poc.uat.us2.chromeriver.com',
 };
 
 async function makeUpstreamCall(targetHost, object) {
