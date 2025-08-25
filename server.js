@@ -188,15 +188,8 @@ async function getClusterForCustomer(customerCode, customerId) {
 async function queryClusterByIndex(indexName, keyName, keyValue) {
   console.log(`Querying DynamoDB for ${keyName}=${keyValue} using index ${indexName}`);
 
-  const credentials = {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    // sessionToken: process.env.AWS_SESSION_TOKEN // Uncomment if needed
-  };
-
   const client = new DynamoDBClient({
     region: process.env.AWS_REGION || 'us-east-1',
-    credentials
   });
 
   const params = {
