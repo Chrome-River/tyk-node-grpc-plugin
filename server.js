@@ -4,7 +4,7 @@ const path = require('path');
 const https = require('https');
 const dotenv = require('dotenv').config();
 const { DynamoDBClient, QueryCommand } = require('@aws-sdk/client-dynamodb');
-
+const { fromContainerMetadata } = require("@aws-sdk/credential-providers");
 
 // Load proto files
 const PROTO_PATH = path.join(__dirname, 'proto', 'coprocess_object.proto');
@@ -190,6 +190,7 @@ async function queryClusterByIndex(indexName, keyName, keyValue) {
 
   const client = new DynamoDBClient({
     region: process.env.AWS_REGION || 'us-east-1',
+    credentials: fromContainerMetadata(),
   });
 
   const params = {
