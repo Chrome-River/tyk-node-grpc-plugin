@@ -104,6 +104,7 @@ async function MyPreMiddleware(object) {
       response_body: 'Bad Request: Could not find cluster information for ' + (customerCode || customerId) + '.',
       headers: { 'Content-Type': 'text/plain' }
     };
+    return object;
   }
 
   console.log('Found cluster for customer code:', cluster);
