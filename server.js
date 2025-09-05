@@ -4,7 +4,7 @@ const path = require('path');
 const https = require('https');
 const dotenv = require('dotenv').config();
 const { DynamoDBClient, QueryCommand } = require('@aws-sdk/client-dynamodb');
-const { fromContainerMetadata } = require("@aws-sdk/credential-providers");
+const { fromContainerMetadata, fromIni } = require("@aws-sdk/credential-providers");
 
 // Load proto files
 const PROTO_PATH = path.join(__dirname, 'proto', 'coprocess_object.proto');
@@ -75,6 +75,10 @@ async function makeUpstreamCall(targetHost, object) {
 
 // Simple middleware that logs requests and adds a custom header
 async function MyPreMiddleware(object) {
+  // If X-Cluster header already exists, another gateway has already determined the cluster, so skip processing
+  if (object.request.headers['X-Cluster']) {
+    return object;
+  }
   // Add a custom header to the request
   if (!object.request.set_headers) {
     object.request.set_headers = {};
@@ -90,7 +94,6 @@ async function MyPreMiddleware(object) {
     object.request.return_overrides = {
       response_code: 400,
       response_body: 'Bad Request: Neither customerCode nor customerId is defined in request headers.',
-      headers: { 'Content-Type': 'text/plain' }
     };
     return object;
   }
@@ -99,17 +102,16 @@ async function MyPreMiddleware(object) {
   const cluster = await getClusterForCustomer(customerCode, customerId);
 
   if (!cluster) {
+    console.log('No cluster found for customer code or ID:', customerCode || customerId);
     object.request.return_overrides = {
       response_code: 400,
       response_body: 'Bad Request: Could not find cluster information for ' + (customerCode || customerId) + '.',
-      headers: { 'Content-Type': 'text/plain' }
     };
     return object;
   }
 
   console.log('Found cluster for customer code:', cluster);
-  // object.request.set_headers['X-Cluster'] = clusterRegionMap[cluster] || 'unknown';
-  // return object;
+  object.request.set_headers['X-Cluster'] = cluster;
 
   try {
     const response = await makeUpstreamCall(clusterRegionMap[cluster], object);
@@ -119,7 +121,7 @@ async function MyPreMiddleware(object) {
     object.request.return_overrides = {
       response_code: response.status,
       response_body: response.body,
-      headers: response.headers,
+      response_headers: response.headers,
     };
   } catch (error) {
     console.log('Error calling upstream:', error);
@@ -127,10 +129,8 @@ async function MyPreMiddleware(object) {
     object.request.return_overrides = {
       response_code: 500,
       response_body: 'Middleware Error: Error calling upstream for customer ' + (customerCode || customerId) + '.',
-      headers: { 'Content-Type': 'text/plain' }
     };
   }
-
   return object;
 }
 
@@ -191,7 +191,7 @@ async function queryClusterByIndex(indexName, keyName, keyValue) {
 
   const client = new DynamoDBClient({
     region: process.env.AWS_REGION || 'us-east-1',
-    credentials: fromContainerMetadata(),
+    credentials: fromIni(),
   });
 
   const params = {
