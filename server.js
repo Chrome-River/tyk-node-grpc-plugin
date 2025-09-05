@@ -191,7 +191,7 @@ async function queryClusterByIndex(indexName, keyName, keyValue) {
 
   const client = new DynamoDBClient({
     region: process.env.AWS_REGION || 'us-east-1',
-    credentials: fromIni(),
+    credentials: fromContainerMetadata(),
   });
 
   const params = {
