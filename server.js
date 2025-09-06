@@ -37,7 +37,7 @@ async function makeUpstreamCall(targetHost, object) {
     console.log('targetUrl', targetUrl);
 
     // Prepare headers - exclude host header and add original headers
-    const headers = { ...object.request.headers };
+    const headers = { ...object.request.headers, ...(object.request.set_headers || {}) };
     delete headers['Host']; // Remove original host header
     headers['Host'] = targetHost; // Set new host
 
