@@ -1,0 +1,29 @@
+global:
+  components:
+    pump: true
+  redis:
+    addrs:
+    - tyk-redis-master.tyk-system.svc.cluster.local:6379
+    passSecret:
+      keyName: redis-password
+      name: tyk-redis
+  remoteControlPlane:
+    connectionString: olympic-midline-hyb.aws-use1.cloud-ara.tyk.io:443
+    groupID:
+    orgId:
+    userApiKey:
+  secrets:
+    APISecret:
+tyk-gateway:
+  gateway:
+    image:
+      tag: v5.8.3
+    extraEnvs:
+    - name: TYK_GW_COPROCESSOPTIONS_COPROCESSGRPCSERVER
+      value: "tcp://tyk-api-poc:8080"
+    - name: TYK_GW_COPROCESSOPTIONS_ENABLECOPROCESS
+      value: "true"
+    - name: TYK_GW_ENABLE_CUSTOM_DOMAINS
+      value: "true"
+    - name: TYK_LOGFORMAT
+      value: json

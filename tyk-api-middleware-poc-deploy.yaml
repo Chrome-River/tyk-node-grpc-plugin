@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: tyk-api-poc
+  name: tyk-api-poc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tyk-api-poc
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: tyk-api-poc
+    spec:
+      containers:
+      - image: hub.emburse.tech/docker/emburse/tyk-api-poc:0.0.1
+        name: tyk-api-poc
+        resources: {}
+        env:
+          - name: AWS_REGION
+            valueFrom:
+              configMapKeyRef:
+                name: tyk-api-poc-properties
+                key: aws_region
+          - name: AWS_DYNAMODB_TABLE
+            valueFrom:
+              configMapKeyRef:
+                name: tyk-api-poc-properties
+                key: aws_dynamodb_table
+        ports:
+          - containerPort: 5555
+      imagePullSecrets:
+        - name: cr-private-registry
+status: {}
+---
+apiVersion: v1
+data:
+  aws_region: us-east-1
+  aws_dynamodb_table: chromeriver-cXqa-api-routing
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: tyk-api-poc-properties
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: tyk-api-poc
+  name: tyk-api-poc
+spec:
+  ports:
+  - name: 8080-5555
+    port: 8080
+    protocol: TCP
+    targetPort: 5555
+  selector:
+    app: tyk-api-poc
+  type: ClusterIP
+status:
+  loadBalancer: {}
