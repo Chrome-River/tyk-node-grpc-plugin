@@ -1,0 +1,15 @@
+---
+version: 1
+component:
+  name: "tyk-node-grpc-plugin"
+  type: "service"
+  owner: "sre"
+  aliases:
+    - "tyk-node-grpc-plugin"
+  tags:
+    - key: "emburse_bu"
+      value: "chromeriver"
+  repositories:
+    - name: "Chrome-River/tyk-node-grpc-plugin"
+      path: "/"
+      provider: "github"
