@@ -11,6 +11,9 @@ component:
   tags:
     - key: "emburse_bu"
       value: "chromeriver"
+  properties:
+    functionality_key:
+      - "functionality:enterprise-shared-platform-delivery-developer-platform"
   repositories:
     - name: "Chrome-River/tyk-node-grpc-plugin"
       path: "/"
