@@ -2,7 +2,8 @@
 version: 1
 component:
   name: "tyk-node-grpc-plugin"
-  type: "service"
+  type: "library"
+  system: "enterprise_shared"
   owner: "sre"
   aliases:
     - "tyk-node-grpc-plugin"
