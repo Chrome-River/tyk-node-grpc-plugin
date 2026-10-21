@@ -5,6 +5,7 @@ component:
   type: "library"
   system: "enterprise_shared"
   owner: "sre"
+  lifecycle: "generally_available"
   aliases:
     - "tyk-node-grpc-plugin"
   tags:
